@@ -95,18 +95,26 @@ def read_mw(threadName, Dauer, delay, File):
     # Messung so lange wiederholen bis die Zeit abgelaufen ist
     if Tges < Ds:
         messung()
+    else:
+        Tges = 0
 
 # ----------------------------------------
 
 def start():
     global Ds, Is, DF, Tges
-    # Wenn bereits eine Messung läuft, kann keine neue gestartet werden
     try:
+        # Wenn bereits eine Messung läuft, kann keine neue gestartet werden
         if Tges > 0:
             ausgabe_1.config(fg="red")
             ausgabe_1["text"] = "Messung läuft bereits"
             return
-     # Wenn keine Messung läuft, wird eine gestartet
+        else:
+            # Wenn eine Messung schon fertig ist, kann eine neue gestartet werden
+            (Ds, Is, DF) = eingabe()
+            kopf_schreiben()
+            messung()
+
+     # Wenn noch keine Messung gelaufen ist, wird eine gestartet
     except:
         Tges = 0
         (Ds, Is, DF) = eingabe()
