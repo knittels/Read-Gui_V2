@@ -35,19 +35,20 @@ def read_mw(threadName, Dauer, delay, File):
     #d.write(Datum + ";" + "Temperatur" + ";" + "rel.Feuchte" + "\n")
     #d.close()
 
-    ausgabe_1.config(fg="blue")
-    ausgabe_1["text"] = "Messung läuft"
-
     # Verbindung zum Sensor...
     try:
         u = urllib.request.urlopen("http://sensor1:8080")
     except:
         print("Fehler: Sensor nicht online")
+        ausgabe_1.config(fg="red")
+        ausgabe_1["text"] = "Sensor nicht online"
         sys.exit(0)
     # ... und in eine Liste einlesen
     li = u.readlines()
     # ... und wieder schließen
     u.close()
+    ausgabe_1.config(fg="blue")
+    ausgabe_1["text"] = "Messung läuft"
 
     # Ausgabe der Werte
     for Wert in li:
@@ -131,6 +132,8 @@ def oeffnen(Datei,Modus):
         d = open(Datei, Modus)
     except:
         print("Datei nicht gefunden")
+        ausgabe_1.config(fg="red")
+        ausgabe_1["text"] = "Datei nicht gefunden"
         sys.exit(0)
     return (d)
 #-----------------------------------------
