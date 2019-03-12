@@ -97,6 +97,8 @@ def read_mw(threadName, Dauer, delay, File):
         messung()
     else:
         Tges = 0
+        ausgabe_1.config(fg="black")
+        ausgabe_1["text"] = "Messung beendet"
 
 # ----------------------------------------
 
