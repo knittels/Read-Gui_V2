@@ -40,8 +40,7 @@ def read_mw(threadName, Dauer, delay, File):
         u = urllib.request.urlopen("http://sensor1:8080")
     except:
         print("Fehler: Sensor nicht online")
-        ausgabe_1.config(fg="red")
-        ausgabe_1["text"] = "Sensor nicht online"
+        status("red", "Sensor nicht online")
         sys.exit(0)
     # ... und in eine Liste einlesen
     li = u.readlines()
@@ -73,7 +72,6 @@ def read_mw(threadName, Dauer, delay, File):
         d.close()
     # Ausgabe der Messwerte im Fenster vorbereiten
     # anhängig vom Wert -> verschiedene Farben
-    #ausgabe_uhr.after(1000)
     ausgabe_uhr.config(fg="blue")
     ausgabe_uhr["text"] = Zeit + " Uhr"
     if int(Temp[0:3]) < 20:
@@ -98,8 +96,7 @@ def read_mw(threadName, Dauer, delay, File):
         messung()
     else:
         Tges = 0
-        ausgabe_1.config(fg="black")
-        ausgabe_1["text"] = "Messung beendet"
+        status("black", "Messung beendet")
 
 # ----------------------------------------
 
@@ -108,8 +105,9 @@ def start():
     try:
         # Wenn bereits eine Messung läuft, kann keine neue gestartet werden
         if Tges > 0:
-            ausgabe_1.config(fg="red")
-            ausgabe_1["text"] = "Messung läuft bereits"
+            status("red", "Messung läuft bereits")
+            #ausgabe_1.config(fg="red")
+            #ausgabe_1["text"] = "Messung läuft bereits"
             return
         else:
             # Wenn eine Messung schon fertig ist, kann eine neue gestartet werden
@@ -132,8 +130,7 @@ def oeffnen(Datei,Modus):
         d = open(Datei, Modus)
     except:
         print("Datei nicht gefunden")
-        ausgabe_1.config(fg="red")
-        ausgabe_1["text"] = "Datei nicht gefunden"
+        status("red", "Datei nicht gefunden")
         sys.exit(0)
     return (d)
 #-----------------------------------------
@@ -149,6 +146,7 @@ def kopf_schreiben():
 
 #-----------------------------------------
 
+# Messung als eigenen Thread starten, damit die Gui nicht blockiert wird.
 def messung():
     _thread.start_new_thread(read_mw, ("thread_1", Ds, Is, DF))
 
@@ -159,13 +157,12 @@ def stop():
 
 #----------------------------------------
 
-def main():
-    while True:
-        fenster.update_idletasks()
-        fenster.update()
+# Statusnachricht im fenster ausgeben
+def status(farbe, nachricht):
+    ausgabe_1.config(fg=farbe)
+    ausgabe_1["text"] = nachricht
 
-
-
+# ---------------------------------------
 
 
 # Fenster
